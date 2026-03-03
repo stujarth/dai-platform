@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--host", "127.0.0.1"],
+      "port": 5173,
+      "cwd": "apps/web"
+    },
+    {
+      "name": "api",
+      "runtimeExecutable": "/Users/stuartarthur/code/dai-platform/apps/api/.venv/bin/uvicorn",
+      "runtimeArgs": ["app.main:app", "--reload", "--port", "8000"],
+      "port": 8000,
+      "cwd": "apps/api"
+    }
+  ]
+}
