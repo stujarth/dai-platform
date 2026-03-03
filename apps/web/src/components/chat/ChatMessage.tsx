@@ -5,12 +5,11 @@
 // display, and a streaming/typing indicator.
 // ---------------------------------------------------------------------------
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { User, Sparkles, Copy, Check, ChevronDown, Wrench } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -26,7 +25,7 @@ export interface ChatMessageProps {
   message: {
     role: string;
     content: string;
-    toolCalls?: ToolCall[];
+    toolCalls?: unknown[];
   };
 }
 
@@ -106,11 +105,11 @@ function ToolCallCard({ tool }: { tool: ToolCall }) {
               {String(r.chart_type ?? tool.input?.chart_type ?? 'unknown')}
             </span>
           </p>
-          {r.title && (
+          {r.title ? (
             <p className="text-xs text-gray-500">
               Title: {String(r.title)}
             </p>
-          )}
+          ) : null}
         </div>
       );
     }
@@ -254,14 +253,14 @@ export function ChatMessage({ message }: ChatMessageProps) {
                   // fenced blocks.
                   const isBlock = className?.startsWith('language-');
                   if (isBlock) {
-                    return <CodeBlock className={className}>{children}</CodeBlock>;
+                    return <CodeBlock className={className}>{children as React.ReactNode}</CodeBlock>;
                   }
                   return (
                     <code
                       className="bg-gray-200 text-gray-800 px-1 py-0.5 rounded text-xs"
                       {...props}
                     >
-                      {children}
+                      {children as React.ReactNode}
                     </code>
                   );
                 },
