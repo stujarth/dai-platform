@@ -207,23 +207,43 @@ function StepSelectSource() {
                 </CardHeader>
                 <CardFooter>
                   {isAvailable ? (
-                    <Button
-                      onClick={() => handleConnect(source)}
-                      disabled={isConnecting || connectingId !== null}
-                      size="sm"
-                    >
-                      {isConnecting ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Connecting...
-                        </>
-                      ) : (
-                        <>
-                          <Database className="h-4 w-4" />
-                          Connect
-                        </>
-                      )}
-                    </Button>
+                    source.type === 'file' ? (
+                      <Button
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploading}
+                        size="sm"
+                      >
+                        {uploading ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <FileUp className="h-4 w-4" />
+                            Upload File
+                          </>
+                        )}
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => handleConnect(source)}
+                        disabled={isConnecting || connectingId !== null}
+                        size="sm"
+                      >
+                        {isConnecting ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Connecting...
+                          </>
+                        ) : (
+                          <>
+                            <Database className="h-4 w-4" />
+                            Connect
+                          </>
+                        )}
+                      </Button>
+                    )
                   ) : (
                     <Button size="sm" variant="ghost" disabled>
                       Coming Soon
