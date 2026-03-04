@@ -10,7 +10,11 @@ _ai_service: AIService | None = None
 
 
 def init_services():
+    """Initialize DuckDB and AI services. Safe to call multiple times."""
     global _duckdb_service, _ai_service
+    if _duckdb_service is not None:
+        return  # Already initialized
+
     _duckdb_service = DuckDBService(settings.DUCKDB_PATH)
     _duckdb_service.load_sample_data(settings.SAMPLE_DATA_DIR)
 
@@ -25,10 +29,16 @@ def shutdown_services():
 
 
 def get_duckdb() -> DuckDBService:
+    """Return DuckDB service, initializing lazily if lifespan didn't fire."""
+    if _duckdb_service is None:
+        init_services()
     assert _duckdb_service is not None
     return _duckdb_service
 
 
 def get_ai_service() -> AIService:
+    """Return AI service, initializing lazily if lifespan didn't fire."""
+    if _ai_service is None:
+        init_services()
     assert _ai_service is not None
     return _ai_service

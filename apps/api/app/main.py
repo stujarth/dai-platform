@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -24,9 +25,21 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Build CORS origins: always allow local dev, dynamically add Vercel domains
+_cors_origins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+_vercel_url = os.environ.get("VERCEL_URL")
+if _vercel_url:
+    _cors_origins.append(f"https://{_vercel_url}")
+_vercel_prod_url = os.environ.get("VERCEL_PROJECT_PRODUCTION_URL")
+if _vercel_prod_url:
+    _cors_origins.append(f"https://{_vercel_prod_url}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
